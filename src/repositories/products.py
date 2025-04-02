@@ -5,10 +5,20 @@ from models import Item
 TABLE_NAME = 'PurchasedProducts'
 
 
-def get_prods_to_buy(conn: connection) -> list[tuple]:
+def get_prods_to_buy(
+        conn: connection, only_active: bool | None = False,  only_not_active: bool | None = False) -> list[tuple]:
+
     cursor = conn.cursor()
 
-    cursor.execute(f'SELECT * FROM {TABLE_NAME}')
+    sql = f'SELECT * FROM {TABLE_NAME} '
+
+    if only_active:
+        sql += 'WHERE IsPurchased = False '
+
+    if only_not_active and not only_active:
+        sql += 'WHERE IsPurchased = True ORDER BY DoneAt DESC'
+
+    cursor.execute(sql)
 
     items = cursor.fetchall()
     cursor.close()
@@ -68,8 +78,12 @@ def update_product(conn: connection, product: Item) -> str:
         vars_list = [product.is_done, product.done_at, product.item_id]
 
     cursor.execute(sql, vars_list)
+    affected_rows = cursor.rowcount  # Número de linhas alteradas
     conn.commit()
     cursor.close()
+
+    if affected_rows == 0:
+        raise ValueError(f"Produto com ID {product.item_id} não encontrado")
 
     return product.name
 
@@ -79,7 +93,11 @@ def delete_product(conn: connection, id: int) -> int:
     sql = f'DELETE FROM {TABLE_NAME} WHERE id = %s '
 
     cursor.execute(sql, [id])
+    affected_rows = cursor.rowcount  # Número de linhas excluídas
     conn.commit()
     cursor.close()
+
+    if affected_rows == 0:
+        raise ValueError(f"Produto com ID {id} não encontrado")
 
     return id

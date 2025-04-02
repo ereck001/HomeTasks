@@ -1,4 +1,6 @@
-from fastapi import APIRouter
+from typing import Optional
+
+from fastapi import APIRouter, Query
 from fastapi.responses import UJSONResponse
 
 from models import Item, ItemBase
@@ -11,10 +13,13 @@ router = APIRouter(prefix="/products", tags=["products"])
 
 
 @router.get("/")
-async def list_products():
+async def list_products(
+        not_done_only: Optional[bool] = Query(None, alias="not_done_only"),
+        done_only: Optional[bool] = Query(None, alias="done_only")):
+
     products = []
     conn = get_conn()
-    items = get_prods_to_buy(conn)
+    items = get_prods_to_buy(conn, not_done_only, done_only)
     conn.close()
 
     for item_ in items:
@@ -70,7 +75,13 @@ async def update(product_id: int, product: ItemBase):
         return UJSONResponse({'Erro': 'Atualize ao menos um atributo'}, 400)
 
     conn = get_conn()
-    product_name = update_product(conn, prod_to_update)
+
+    try:
+        product_name = update_product(conn, prod_to_update)
+
+    except ValueError as err:
+        return UJSONResponse({'Erro': str(err)}, 400)
+
     conn.close()
 
     return {'Atualizado': product_name}
@@ -79,7 +90,13 @@ async def update(product_id: int, product: ItemBase):
 @router.delete("/{product_id}")
 async def delete(product_id: int):
     conn = get_conn()
-    id = delete_product(conn, product_id)
+
+    try:
+        id = delete_product(conn, product_id)
+
+    except ValueError as err:
+        return UJSONResponse({'Erro': str(err)}, 400)
+
     conn.close()
 
     return {'Excluído': id}

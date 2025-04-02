@@ -1,16 +1,22 @@
 from pydantic import BaseModel
 
 
-class Item(BaseModel):
-    item_id: int = 0
+class ItemBase(BaseModel):
     name: str
-    is_done: bool
-    done_at: str
+    done_at: str | None
 
 
-class Task(BaseModel):
-    item_id: int = 0
+class TaskBase(BaseModel):
     name: str
     description: str
+    done_at: str | None
+
+
+class Item(ItemBase):
+    item_id: int = 0
     is_done: bool
-    done_at: str
+
+
+class Task(TaskBase):
+    item_id: int = 0
+    is_done: bool

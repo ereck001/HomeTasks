@@ -55,6 +55,8 @@ async def get_product(product_id: int):
 
 @router.post("/")
 async def add(name: str):
+    if name.strip() == "":
+        return UJSONResponse({'Erro': 'O nome é obrigatório'}, 400)
     conn = get_conn()
     product_name = add_product(conn, name)
     conn.close()

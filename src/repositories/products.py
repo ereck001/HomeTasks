@@ -50,7 +50,6 @@ def add_product(conn: connection, name: str) -> str:
     cursor.execute(sql, [name])
     conn.commit()
     cursor.close()
-    print(sql)
     return name
 
 
@@ -78,7 +77,7 @@ def update_product(conn: connection, product: Item) -> str:
         vars_list = [product.is_done, product.done_at, product.item_id]
 
     cursor.execute(sql, vars_list)
-    affected_rows = cursor.rowcount  # Número de linhas alteradas
+    affected_rows = cursor.rowcount
     conn.commit()
     cursor.close()
 

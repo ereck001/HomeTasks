@@ -1,8 +1,11 @@
 from pydantic import BaseModel
 
 
-class ItemBase(BaseModel):
+class ItemRaw(BaseModel):
     name: str
+
+
+class ItemBase(ItemRaw):
     done_at: str | None
 
 

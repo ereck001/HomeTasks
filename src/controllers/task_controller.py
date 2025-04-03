@@ -35,7 +35,7 @@ async def list_tasks(
 
 
 @router.get("/{task_id}")
-async def get_product(task_id: int):
+async def get_task(task_id: int):
     conn = get_conn()
     task = get_task_by_id(conn, task_id)
     conn.close()

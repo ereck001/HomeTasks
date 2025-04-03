@@ -3,7 +3,7 @@ from typing import Optional
 from fastapi import APIRouter, Query
 from fastapi.responses import UJSONResponse
 
-from models import Item, ItemBase
+from models import Item, ItemBase, ItemRaw
 from repositories import get_conn
 from repositories.products import (add_product, delete_product,
                                    get_prods_to_buy, get_produduct_by_id,
@@ -54,11 +54,11 @@ async def get_product(product_id: int):
 
 
 @router.post("/")
-async def add(name: str):
-    if name.strip() == "":
+async def add(item: ItemRaw):
+    if item.name.strip() == "":
         return UJSONResponse({'Erro': 'O nome é obrigatório'}, 400)
     conn = get_conn()
-    product_name = add_product(conn, name)
+    product_name = add_product(conn, item.name)
     conn.close()
 
     return {'Adicionado': product_name}

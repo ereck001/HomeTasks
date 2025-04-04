@@ -73,8 +73,8 @@ async def update(product_id: int, product: ItemBase):
         done_at=product.done_at
     )
 
-    if prod_to_update.name.strip() == '' and prod_to_update.done_at == None:
-        return UJSONResponse({'Erro': 'Atualize ao menos um atributo'}, 400)
+    # if prod_to_update.name.strip() == '' and prod_to_update.done_at == None:
+    #     return UJSONResponse({'Erro': 'Atualize ao menos um atributo'}, 400)
 
     conn = get_conn()
 

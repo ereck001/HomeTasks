@@ -3,7 +3,7 @@ from typing import Optional
 from fastapi import APIRouter, Query
 from fastapi.responses import UJSONResponse
 
-from models import Task, TaskBase
+from models import Task, TaskBase, TaskRaw
 from repositories import get_conn
 from repositories.tasks import (add_task, delete_task, get_task_by_id,
                                 get_tasks, update_task)
@@ -55,11 +55,11 @@ async def get_task(task_id: int):
 
 
 @router.post("/")
-async def add(name: str, description):
-    if name.strip() == "":
+async def add(task: TaskRaw):
+    if task.name.strip() == "":
         return UJSONResponse({'Erro': 'O nome é obrigatório'}, 400)
     conn = get_conn()
-    task_name = add_task(conn, name, description)
+    task_name = add_task(conn, task.name, task.description)
     conn.close()
 
     return {'Adicionado': task_name}
@@ -75,9 +75,9 @@ async def update(task_id: int, task: TaskBase):
         done_at=task.done_at
     )
 
-    if task_to_update.name.strip() == '' and \
-            task_to_update.description.strip() == '' and task_to_update.done_at == None:
-        return UJSONResponse({'Erro': 'Atualize ao menos um atributo'}, 400)
+    # if task_to_update.name.strip() == '' and \
+    #         task_to_update.description.strip() == '' and task_to_update.done_at == None:
+    #     return UJSONResponse({'Erro': 'Atualize ao menos um atributo'}, 400)
 
     conn = get_conn()
 

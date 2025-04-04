@@ -5,13 +5,16 @@ class ItemRaw(BaseModel):
     name: str
 
 
+class TaskRaw(BaseModel):
+    name: str
+    description: str
+
+
 class ItemBase(ItemRaw):
     done_at: str | None
 
 
-class TaskBase(BaseModel):
-    name: str
-    description: str
+class TaskBase(TaskRaw):
     done_at: str | None
 
 

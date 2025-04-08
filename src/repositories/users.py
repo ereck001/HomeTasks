@@ -27,17 +27,17 @@ def get_user_by_id(conn: connection, id: int) -> tuple | None:
     return item
 
 
-# def add_user(conn: connection, name: str, description: str) -> str:
-#     cursor = conn.cursor()
-#     sql = f"""
-#             INSERT INTO {TABLE_NAME} (name, description, isDone, doneAt)
-#             VALUES
-#                 ( %s, %s, FALSE, NULL);
-#             """
-#     cursor.execute(sql, [name, description])
-#     conn.commit()
-#     cursor.close()
-#     return name
+def add_user(conn: connection, name: str, password: str) -> str:
+    cursor = conn.cursor()
+    sql = f"""
+            INSERT INTO {TABLE_NAME} (Name, Password, role_id)
+            VALUES
+                ( %s, %s, 2);
+            """
+    cursor.execute(sql, [name, password])
+    conn.commit()
+    cursor.close()
+    return name
 
 
 # def update_user(conn: connection, task: Task) -> str:

@@ -1,8 +1,9 @@
 from typing import Optional
 
-from fastapi import APIRouter, Query
+from fastapi import APIRouter, Depends, Query
 from fastapi.responses import UJSONResponse
 
+from authentication import verify_token
 from models import Item, ItemBase, ItemRaw
 from repositories import get_conn
 from repositories.products import (add_product, delete_product,
@@ -12,10 +13,12 @@ from repositories.products import (add_product, delete_product,
 router = APIRouter(prefix="/products", tags=["products"])
 
 
-@router.get("/")
+@router.get("/", dependencies=[Depends(verify_token)])
 async def list_products(
         not_done_only: Optional[bool] = Query(None, alias="not_done_only"),
-        done_only: Optional[bool] = Query(None, alias="done_only")):
+        done_only: Optional[bool] = Query(None, alias="done_only"),
+        # token_data: dict = Depends(verify_token)
+):
 
     products = []
     conn = get_conn()
@@ -34,7 +37,7 @@ async def list_products(
     return {"Produtos": products}
 
 
-@router.get("/{product_id}")
+@router.get("/{product_id}", dependencies=[Depends(verify_token)])
 async def get_product(product_id: int):
     conn = get_conn()
     product = get_produduct_by_id(conn, product_id)
@@ -53,7 +56,7 @@ async def get_product(product_id: int):
     return {"Produto": product_item}
 
 
-@router.post("/")
+@router.post("/", dependencies=[Depends(verify_token)])
 async def add(item: ItemRaw):
     if item.name.strip() == "":
         return UJSONResponse({'Erro': 'O nome é obrigatório'}, 400)
@@ -64,7 +67,7 @@ async def add(item: ItemRaw):
     return {'Adicionado': product_name}
 
 
-@router.put("/{product_id}")
+@router.put("/{product_id}", dependencies=[Depends(verify_token)])
 async def update(product_id: int, product: ItemBase):
     prod_to_update = Item(
         item_id=product_id,
@@ -89,7 +92,7 @@ async def update(product_id: int, product: ItemBase):
     return {'Atualizado': product_name}
 
 
-@router.delete("/{product_id}")
+@router.delete("/{product_id}", dependencies=[Depends(verify_token)])
 async def delete(product_id: int):
     conn = get_conn()
 

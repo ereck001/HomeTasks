@@ -1,11 +1,12 @@
 import uvicorn
 from fastapi import FastAPI
 
-from controllers import product_controller, task_controller
+from controllers import account_controller, product_controller, task_controller
 
 app = FastAPI()
 app.include_router(product_controller.router)
 app.include_router(task_controller.router)
+app.include_router(account_controller.router)
 
 
 @app.get("/")

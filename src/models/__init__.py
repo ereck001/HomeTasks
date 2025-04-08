@@ -26,3 +26,15 @@ class Item(ItemBase):
 class Task(TaskBase):
     item_id: int = 0
     is_done: bool
+
+
+class UserBase(BaseModel):
+    name: str
+    password: str
+
+
+class User(UserBase):
+    id: int = 0
+    name: str
+    password: str
+    role: int

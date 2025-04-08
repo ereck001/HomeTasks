@@ -1,8 +1,9 @@
 from typing import Optional
 
-from fastapi import APIRouter, Query
+from fastapi import APIRouter, Depends, Query
 from fastapi.responses import UJSONResponse
 
+from authentication import verify_token
 from models import Task, TaskBase, TaskRaw
 from repositories import get_conn
 from repositories.tasks import (add_task, delete_task, get_task_by_id,
@@ -34,7 +35,7 @@ async def list_tasks(
     return {"Tasks": tasks}
 
 
-@router.get("/{task_id}")
+@router.get("/{task_id}", dependencies=[Depends(verify_token)])
 async def get_task(task_id: int):
     conn = get_conn()
     task = get_task_by_id(conn, task_id)
@@ -54,7 +55,7 @@ async def get_task(task_id: int):
     return {"Tarefa": task_item}
 
 
-@router.post("/")
+@router.post("/", dependencies=[Depends(verify_token)])
 async def add(task: TaskRaw):
     if task.name.strip() == "":
         return UJSONResponse({'Erro': 'O nome é obrigatório'}, 400)
@@ -65,7 +66,7 @@ async def add(task: TaskRaw):
     return {'Adicionado': task_name}
 
 
-@router.put("/{task_id}")
+@router.put("/{task_id}", dependencies=[Depends(verify_token)])
 async def update(task_id: int, task: TaskBase):
     task_to_update = Task(
         item_id=task_id,
@@ -92,7 +93,7 @@ async def update(task_id: int, task: TaskBase):
     return {'Atualizado': task_name}
 
 
-@router.delete("/{task_id}")
+@router.delete("/{task_id}", dependencies=[Depends(verify_token)])
 async def delete(task_id: int):
     conn = get_conn()
 

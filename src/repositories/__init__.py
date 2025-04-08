@@ -5,6 +5,7 @@ from dotenv import load_dotenv
 from psycopg2.extensions import connection
 
 from authentication import hash_password
+from functions import save_log
 
 load_dotenv()
 
@@ -91,5 +92,5 @@ def create_tables(conn: connection):
 
     except Exception as e:
         conn.rollback()
-        print("❌ Erro ao criar tabelas ou inserir dados:", str(e))
+        save_log("❌ Erro ao criar tabelas ou inserir dados:" + str(e))
         raise

@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    environment:
+      - DB_NAME=hometasks
+      - DB_HOST=db
+      - DB_USER=<usuario>
+      - DB_PASSWORD=<senha>
+      - DB_PORT=5432
+      - ADM_PASS=<senha do adm>
+      - SECRET_KEY=<segredo do jwt>
+      - ALGORITHM=HS256
+    volumes:
+      - ./src:/app/src
+    networks:
+      - app-network
+
+  db:
+    image: postgres:latest
+    container_name: postgres_docker_2
+    environment:
+      - POSTGRES_USER=<usuario>
+      - POSTGRES_PASSWORD=<senha>
+      - POSTGRES_DB=hometasks
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - app-network
+
+volumes:
+  postgres_data:
+
+networks:
+  app-network:
+    driver: bridge

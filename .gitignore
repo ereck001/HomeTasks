@@ -2,5 +2,5 @@ venv
 .env
 .mypy*
 *cache*
-docker-compose*
+docker-compose.yml
 Dockerfile

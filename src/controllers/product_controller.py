@@ -3,12 +3,12 @@ from typing import Optional
 from fastapi import APIRouter, Depends, Query
 from fastapi.responses import UJSONResponse
 
-from authentication import verify_token
-from models import Item, ItemBase, ItemRaw
-from repositories import get_conn
-from repositories.products import (add_product, delete_product,
-                                   get_prods_to_buy, get_produduct_by_id,
-                                   update_product)
+from ..authentication import verify_token
+from ..models import Item, ItemBase, ItemRaw
+from ..repositories import get_conn
+from ..repositories.products import (add_product, delete_product,
+                                     get_prods_to_buy, get_produduct_by_id,
+                                     update_product)
 
 router = APIRouter(prefix="/products", tags=["products"])
 

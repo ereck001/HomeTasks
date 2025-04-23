@@ -4,8 +4,8 @@ import psycopg2
 from dotenv import load_dotenv
 from psycopg2.extensions import connection
 
-from authentication import hash_password
-from functions import save_log
+from ..authentication import hash_password
+from ..functions import save_log
 
 load_dotenv()
 
@@ -31,7 +31,7 @@ def create_tables(conn: connection):
             id SERIAL PRIMARY KEY,
             name VARCHAR(30) NOT NULL,
             description TEXT,
-            isPurchased BOOLEAN NOT NULL,
+            isDone BOOLEAN NOT NULL,
             doneAt DATE
         );
     """

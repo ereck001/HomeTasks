@@ -1,8 +1,9 @@
 import uvicorn
 from fastapi import FastAPI
 
-from controllers import account_controller, product_controller, task_controller
-from repositories import create_tables, get_conn
+from .controllers import (account_controller, product_controller,
+                          task_controller)
+from .repositories import create_tables, get_conn
 
 app = FastAPI()
 app.include_router(product_controller.router)

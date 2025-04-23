@@ -1,6 +1,6 @@
 from psycopg2.extensions import connection
 
-from models import Item
+from ..models import Item
 
 TABLE_NAME = 'PurchasedProducts'
 

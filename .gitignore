@@ -2,3 +2,5 @@ venv
 .env
 .mypy*
 *cache*
+docker-compose*
+Dockerfile

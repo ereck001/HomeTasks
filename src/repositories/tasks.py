@@ -1,6 +1,6 @@
 from psycopg2.extensions import connection
 
-from models import Task
+from ..models import Task
 
 TABLE_NAME = 'Tasks'
 

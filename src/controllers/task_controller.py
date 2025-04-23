@@ -3,11 +3,11 @@ from typing import Optional
 from fastapi import APIRouter, Depends, Query
 from fastapi.responses import UJSONResponse
 
-from authentication import verify_token
-from models import Task, TaskBase, TaskRaw
-from repositories import get_conn
-from repositories.tasks import (add_task, delete_task, get_task_by_id,
-                                get_tasks, update_task)
+from ..authentication import verify_token
+from ..models import Task, TaskBase, TaskRaw
+from ..repositories import get_conn
+from ..repositories.tasks import (add_task, delete_task, get_task_by_id,
+                                  get_tasks, update_task)
 
 router = APIRouter(prefix="/tasks", tags=["tasks"])
 

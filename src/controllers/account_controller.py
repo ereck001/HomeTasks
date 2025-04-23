@@ -6,10 +6,10 @@ from dotenv import load_dotenv
 from fastapi import APIRouter, Depends
 from fastapi.responses import UJSONResponse
 
-from authentication import hash_password, verify_password, verify_token
-from models import User, UserBase
-from repositories import get_conn
-from repositories.users import add_user, get_user_by_name
+from ..authentication import hash_password, verify_password, verify_token
+from ..models import User, UserBase
+from ..repositories import get_conn
+from ..repositories.users import add_user, get_user_by_name
 
 router = APIRouter(prefix="/user", tags=["user"])
 

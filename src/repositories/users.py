@@ -1,6 +1,6 @@
 from psycopg2.extensions import connection
 
-from models import User
+# from models import User
 
 TABLE_NAME = 'Users'
 
